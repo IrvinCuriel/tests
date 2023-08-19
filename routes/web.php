@@ -23,4 +23,5 @@ Route::get('/', function () {
 //Route::get('/oauth/callback', [ SalesforceController::class, 'oauthCallback' ]);
 
 Route::get('/archivos','ArchivoController@index');
-Route::post('store_archivo', 'ArchivoController@store')->name('archivo.store');
+Route::post('store-archivo', 'ArchivoController@store')->name('archivo.store');
+Route::get('downloacd-archivo', 'ArchivoController@downloadArchivo')->name('archivo.download');

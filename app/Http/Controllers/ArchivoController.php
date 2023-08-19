@@ -26,7 +26,7 @@ class ArchivoController extends Controller
     public function store(Request $request)
     {
         //
-        dd($request->all());
+        //dd($request->all());
 
         /*
         $documento = $request->file('file');
@@ -51,9 +51,9 @@ class ArchivoController extends Controller
         $documento->move(public_path('/'), $nombreDocumento);
 
         
-        $destinationPath = '/';
-        $myimage = $request->file->getClientOriginalName();
-        $request->file->move(public_path($destinationPath), $myimage);
+        //$destinationPath = '/';
+        //$myimage = $request->file->getClientOriginalName();
+        //$request->file->move(public_path($destinationPath), $myimage);
    
         
 
@@ -71,6 +71,12 @@ class ArchivoController extends Controller
         return Redirect::back()->with('success','Archivo almacenado exitosamente!');
     }
 
+    public function downloadArchivo(Request $request)
+    {
+        //
+        $myFile = public_path("sitemap.xml");
+        return response()->download($myFile);
+    }
 
     public function show(Archivo $archivo)
     {
