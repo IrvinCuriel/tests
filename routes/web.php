@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-namespace App\Http\Controllers\SalesforceController;
+//namespace App\Http\Controllers\SalesforceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,5 +19,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/install', [ SalesforceController::class, 'index' ]);
-Route::get('/oauth/callback', [ SalesforceController::class, 'oauthCallback' ]);
+//Route::get('/install', [ SalesforceController::class, 'index' ]);
+//Route::get('/oauth/callback', [ SalesforceController::class, 'oauthCallback' ]);
+
+Route::get('/archivos','ArchivoController@index');
+Route::post('store_archivo', 'ArchivoController@store')->name('archivo.store');
