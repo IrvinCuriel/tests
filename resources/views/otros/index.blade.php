@@ -597,7 +597,7 @@
 
                 });
 
-
+                //Route::post('show_datos_asistentes_minuta', 'minutas_controller@show_datos_asistentes_minuta');
                 //Sección Anexos
                 $.ajax({
                   url:"show_datos_anexos_minuta",
