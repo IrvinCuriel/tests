@@ -1,0 +1,161 @@
+
+1.- En tabla oauth_client
+
+2.- En resources->views se crea archivo client.blade.php
+se crea un formulario con la ruta action="{{ url('/oauth/clients') }}"
+
+3.- En routes->web.php
+ Route::get('/client', function() {
+ 	return view('client');
+ })->middleware('auth');
+ 
+4.- Registrar un usuario desde register
+ 
+5.- Ir a la ruta que se creo /clients y se vera el formulario.
+ 
+6.- se creara el client y regresa un json con los datos del registro de la taba oauth_client
+ 
+7.- Crear un modelo para poder consumir los datos en la vista:
+ en app->client.php
+ 
+<?php
+namespace App;
+use Illuminate\Database\Eloquent\Model;
+class Client extends Model
+{
+	protected $table = 'oauth_clients';
+}
+
+8.- php artisan make:controller ClientController
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class ClientController extends Controller
+{
+    public function index()
+    {
+    	$clients = \App\Client::where('user_id', Auth::user()->id)->get();
+    	return view('client', compact('clients'));
+    }
+}
+
+9.- En web.php
+Route::get('/client', 'ClientController@index')->middleware('auth');
+
+10.- Laravel CORS
+composer require barryvdh/laravel-cors
+
+11.- Registrar Service Provider
+en config->app.php
+        Barryvdh\Cors\ServiceProvider::class,
+ 
+12.- En app->Http->Kernel.php
+colocar en $middlewarw y $middlewareGroups->api
+        \Barryvdh\Cors\HandleCors::class,
+        
+13.- php artisan vendor:publish --provider="Barryvdh\Cors\ServiceProvider"
+(esto genera en la carpeta config un archivo llamado cors con las configuraciones necesarias para que funcione
+*EN versiones actuales ya viene el archivo)
+
+14.- PASSWORD GRANt TOKENS
+Mediante password y correo
+php artisan passport:client --password
+-Dar name al grant client
+-redirect
+Genera un Client ID:
+Genera un CLient Secret
+NOta en la taba oauth_clients user_id es null
+
+15.- creacion de migracion  para tomar registros de ejemplos
+php artisan migrate create_posts_table --create=posts
+
+16.-crear modelo para tabla posts Post.php
+
+17.- crear Seeder para la tabla post
+php artisan make:seeder PostsTableSeeder
+
+18.- en routes->api.php
+Route::get('posts', function () {
+	return App\Post::all();
+})->middleware('auth:api');
+
+
+19.- 
+
+<script>
+	(function () {
+
+		'use strict';
+
+		const clientId = 1;
+		const clientSecret = 'XXXXX';
+		const grantType ="password";
+
+		let login = document.getElementById('login');
+
+			login.addEventListener('click', e => {
+
+				e.preventDefault();
+
+
+				fetch('http://localhost:8000/oauth/token', {
+					method: 'POST',
+					body: JSON.stringify({
+						client_id: clientId
+						client_secret: clientSecret,
+						grant_type: grantType,
+						username:
+						password:
+					}),
+					.then(response => {
+						return response.json();
+					})
+					//.then(data => console.log(data))
+					.then(data => {
+						localStorage.setItem('token', data.access_token);
+					})
+				});
+
+
+
+			});
+
+	})();
+</script>
+
+*php artisan passport:client --password
+ID
+Secret
+
+20.- 
+
+<script>
+	(function () {
+
+		'use strict';
+
+		if( localStorage.getItem('token')){
+			fetch('http://localhost:8080/api/posts', {
+				method: 'GET',
+				headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+			})
+			.then(response => {
+				return response.json()
+			})
+			.then(data => {
+				let li = '';
+				data.forEach ( (posts, index) => {
+					li += '<li>'+post.boby +'</li>'; 
+				})
+				document.querySelector('ul').innerHTML = li;
+			})
+		}
+
+	})();
+</script>
+
+
