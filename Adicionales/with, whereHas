@@ -1,1 +1,25 @@
-Hola 2
+
+    with('cliente')->whereHas('roles_x_personas', function ($query) {
+        $query->where('id_rol', 1);
+    })->get();
+        
+    with(['cotizacion' => function ($query) {
+        $query->where('estatus', 'No Aprobado')->orWhere('estatus', 'Pendiente')->orWhere('estatus', 'Completado');
+    }])
+
+    whereHas('cotizacion', function ($query) {
+        $query->where('estatus', 'No Aprobado')->orWhere('estatus', 'Pendiente')->orWhere('estatus', 'Completado');
+    })
+
+    with(['precios' => function ($query) use($id_moneda,$id_precio_tipo) {
+        $query->where('id_moneda', $id_moneda)->where('id_precio_tipo',$id_precio_tipo);
+    }])
+    ->get();
+    
+    whereHas('relacion', function ($query) use($persona) {
+        $query->where('id_persona', $persona);
+    })->get();
+
+    ->with(['algo' => function ($query) {
+        $query->select('id_algo', 'fecha')->where('estatus', 'ok');
+    }])
