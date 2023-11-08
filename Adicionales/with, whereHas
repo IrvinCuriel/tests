@@ -23,3 +23,12 @@
     ->with(['algo' => function ($query) {
         $query->select('id_algo', 'fecha')->where('estatus', 'ok');
     }])
+
+    $datos_eventos = Eventos_x_Participantes::join("calendario_eventos","calendario_eventos.id_calendario_evento", "=", "eventos_x_participantes.id_calendario_evento")
+                ->join("usuarios","usuarios.idusuarios", "=", "eventos_x_participantes.id_usuario_participante")
+                ->select('calendario_eventos.actividad', 'calendario_eventos.lugar', 'calendario_eventos.fecha_inicio', 'calendario_eventos.fecha_fin', 'calendario_eventos.hora_inicio', 'calendario_eventos.hora_fin', 'calendario_eventos.url', 'calendario_eventos.color', 'calendario_eventos.id_tipo_evento', 
+                'usuarios.nombre', 'usuarios.apaterno', 'usuarios.estatus', 'eventos_x_participantes.id_tipo_participante', 'eventos_x_participantes.id_calendario_evento' )
+                ->where('eventos_x_participantes.id_tipo_participante',2)
+                ->where('usuarios.estatus','Activo')
+                ->get();
+                $eventos = $datos_eventos->unique('id_calendario_evento');
